@@ -377,6 +377,7 @@ public class UserMenu {
 
 
     private void withdrawMoney(Account acc) {
+        Account fromAccount = acc;
         while (true) {
             System.out.println("\n--- Withdraw Money ---");
             System.out.println("1. Enter Amount");
@@ -402,7 +403,10 @@ public class UserMenu {
                     System.out.println("Insufficient balance. Try again.");
                     continue;
                 }
-
+                if (!verifyPin(fromAccount)) {
+                    System.out.println("PIN verification failed.Withdraw cancelled.");
+                    return;
+                } 
                 double newBalance = acc.getBalance() - amt;
                 if (accountService.updateBalance(acc.getAccountId(), newBalance)) {
                     transactionService.recordTransaction(acc.getAccountId(), "Withdrawal", amt, "Withdrawal", newBalance);
@@ -830,3 +834,4 @@ public class UserMenu {
     }
 
 }
+
